@@ -1,0 +1,29 @@
+# SPDX-FileCopyrightText: Intel Corporation
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+name: Daily
+
+on:
+  push:
+    branches:
+      - main
+
+  pull_request:
+  workflow_dispatch:
+  # 8am UTC is 12am PST, 1am PDT
+  schedule:
+    - cron: '0 8 * * *'
+
+jobs:
+  checks:
+    runs-on: devcloud
+    env:
+      CXX: icpx
+      CC: icx
+    steps:
+    - uses: actions/checkout@v4
+    - name: Checks
+      uses: pre-commit/action@v3.0.0
+    - name: Build & Run
+      run: srun -p pvc-shared scripts/daily.sh
