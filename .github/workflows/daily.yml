@@ -6,8 +6,6 @@ name: Daily
 
 on:
   push:
-    branches:
-      - main
 
   pull_request:
   workflow_dispatch:
@@ -18,10 +16,23 @@ on:
 jobs:
   checks:
     runs-on: devcloud
+    steps:
+    - uses: actions/checkout@v4
+    - name: Apt installs
+      run: |
+        sudo apt update
+        sudo apt install -y clang-format clang-tidy uncrustify cppcheck iwyu
+    - uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+        cache: 'pip'
+    - run: pip install pre-commit
+    - run: pre-commit run --all-files
+  icpx:
+    runs-on: devcloud
     env:
       CXX: icpx
       CC: icx
     steps:
-    - uses: actions/checkout@v4
     - name: Build & Run
       run: srun -p pvc-shared -w idc-beta-batch-pvc-node-12 scripts/daily.sh
