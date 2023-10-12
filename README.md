@@ -45,7 +45,7 @@ In case your environment is not configured properly or you just prefer a hassle-
  git clone https://github.com/mateuszpn/distributed-ranges-tutorial
  cd distributed-ranges-tutorial
  docker run -it -v $(pwd):/custom-directory-name -u root docker.io/intel/oneapi:latest /bin/bash
- cd custom-directory-name 
+ cd custom-directory-name
  CXX=icpx CC=icx cmake -B build -DENABLE_SYCL=ON
  cmake --build build -j
  ```
@@ -147,6 +147,6 @@ The example shows the distributed nature of dr data structures. The distributed_
  _Please note: after each loop the vector content is printed with `fmt::print()`. The formatter function for `distributed_vector` is rather slow, as it gets the vector element by element, both from local node and remote nodes. You can think about customised, more effective way of results presentation._
 
 <!--
-Consider adding one more example: 
+Consider adding one more example:
 *Simple 2-D operation - Find a pattern in the randomly filled array*
 -->

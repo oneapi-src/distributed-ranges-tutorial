@@ -16,6 +16,9 @@ on:
 jobs:
   checks:
     runs-on: devcloud
+    env:
+      CXX: icpx
+      CC: icx
     steps:
     - uses: actions/checkout@v4
     - name: Apt installs
@@ -28,11 +31,5 @@ jobs:
         cache: 'pip'
     - run: pip install pre-commit
     - run: pre-commit run --all-files
-  icpx:
-    runs-on: devcloud
-    env:
-      CXX: icpx
-      CC: icx
-    steps:
     - name: Build & Run
       run: srun -p pvc-shared -w idc-beta-batch-pvc-node-12 scripts/daily.sh
