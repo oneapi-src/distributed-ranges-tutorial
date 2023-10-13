@@ -9,7 +9,7 @@ if(ENABLE_CUDA)
   add_compile_options(-fsycl-targets=nvptx64-nvidia-cuda
                       -Wno-error=unknown-cuda-version)
   add_link_options(-fsycl-targets=nvptx64-nvidia-cuda
-                    -Wno-error=unknown-cuda-version)
+                   -Wno-error=unknown-cuda-version)
 endif()
 
 add_executable(example1 example1.cpp)

@@ -11,8 +11,6 @@ project(
   VERSION 0.1
   DESCRIPTION "Distributed ranges tutorial")
 
-
-
 find_package(MPI REQUIRED)
 
 add_subdirectory(src)
@@ -24,9 +22,9 @@ option(ENABLE_FORMAT "Build with format library" ON)
 include(FetchContent)
 
 FetchContent_Declare(
-    distributed-ranges
-    GIT_REPOSITORY https://github.com/oneapi-src/distributed-ranges.git
-    GIT_TAG c618154a1bceda33e5d61e1536179aeaa11b68f4)
+  distributed-ranges
+  GIT_REPOSITORY https://github.com/oneapi-src/distributed-ranges.git
+  GIT_TAG c618154a1bceda33e5d61e1536179aeaa11b68f4)
 FetchContent_MakeAvailable(distributed-ranges)
 
 FetchContent_Declare(

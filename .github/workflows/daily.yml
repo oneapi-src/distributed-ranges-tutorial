@@ -31,4 +31,3 @@ jobs:
       run: srun -p pvc-shared -w idc-beta-batch-pvc-node-12 scripts/daily.sh
     - name: Run pre-commit
       uses: pre-commit/action@v3.0.0
-
