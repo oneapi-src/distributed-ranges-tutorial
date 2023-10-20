@@ -1,0 +1,41 @@
+# SPDX-FileCopyrightText: Intel Corporation
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+name: Docker
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+  # 8am UTC is 12am PST, 1am PDT
+  schedule:
+  - cron: '0 8 * * *'
+
+jobs:
+  run_examples:
+    name: Run examples
+    runs-on: ubuntu-latest
+    container:
+      image: intel/oneapi:latest
+      env:
+        CXX: icpx
+        CC: icx
+      volumes:
+        - ${{ github.workspace }}:/src
+    steps:
+      - name: Check out
+        uses: actions/checkout@v3
+      - name: Setup cmake
+        uses: jwlawson/actions-setup-cmake@v1.13
+      - name: Build examples
+        run: |
+          cmake -B build -DENABLE_SYCL=on
+          cmake --build build -j
+      - name: Run examples
+        run: |
+          mpirun -n 2 ./build/src/example1
+          mpirun -n 2 ./build/src/example2
+          mpirun -n 2 ./build/src/example3
+      - name: Run pre-commit
+        uses: pre-commit/action@v3.0.0
