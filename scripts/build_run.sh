@@ -4,6 +4,9 @@
 #
 # SPDX-License-Identifier: BSD-3-Clause
 
+export CXX=icpx
+export CC=icx
+
 cmake -B build -DENABLE_SYCL=on
 cmake --build build -j
 
