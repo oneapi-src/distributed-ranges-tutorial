@@ -7,7 +7,7 @@
 export CXX=icpx
 export CC=icx
 
-cmake -B build -DENABLE_SYCL=on
+cmake -B build
 cmake --build build -j
 
 mpirun -n 2 ./build/src/example1
