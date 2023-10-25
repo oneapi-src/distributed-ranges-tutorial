@@ -10,7 +10,7 @@ namespace mhp = dr::mhp;
 /* The example simulates the elementary 1-d cellular automaton. Description of
  * what the automaton is and how it works can be found at
  * https://en.wikipedia.org/wiki/Elementary_cellular_automaton
- * Visulisation of the automaton work is available
+ * Visualisation of the automaton work is available
  * https://elife-asu.github.io/wss-modules/modules/1-1d-cellular-automata
  * (credit: Emergence team @ Arizona State University)*/
 

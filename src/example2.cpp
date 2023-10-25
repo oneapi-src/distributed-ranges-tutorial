@@ -12,7 +12,7 @@ int main(int argc, char **argv) {
   mhp::init(sycl::default_selector_v);
 
   fmt::print(
-      "Hello, World! Distributed ranges proces is running on rank {} / {} on "
+      "Hello, World! Distributed ranges process is running on rank {} / {} on "
       "host {}\n",
       mhp::rank(), mhp::nprocs(), mhp::hostname());
 

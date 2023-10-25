@@ -45,7 +45,7 @@ In case your environment is not configured properly or you just prefer a hassle-
  git clone https://github.com/mateuszpn/distributed-ranges-tutorial
  cd distributed-ranges-tutorial
  docker run -it -v $(pwd):/custom-directory-name -u root docker.io/intel/oneapi:latest /bin/bash
- cd custom-directory-name 
+ cd custom-directory-name
  CXX=icpx CC=icx cmake -B build -DENABLE_SYCL=ON
  cmake --build build -j
  ```
@@ -81,12 +81,12 @@ In this way, many of the technical details related to the parallel execution of 
 ### Namespaces
 
 General namespace used in the library is `dr::`
-For program using a single node with shared memory available for multiple CPUs and one or more GPUs, data structures and algoritms from `dr::shp::` namespace are provided.
+For program using a single node with shared memory available for multiple CPUs and one or more GPUs, data structures and algorithms from `dr::shp::` namespace are provided.
 For distributed memory model, use the `dr::mhp::` namespace.
 
 ### Data structures
 
-Content of distributes-ranges' data structures is distributed over available nodes. For example, segments of `dr::mhp::distributed_vector` are located in memory of different nodes (mpi processes). Still, global view of the `distributed_vector` is uniform, with contigous indices.
+Content of distributes-ranges' data structures is distributed over available nodes. For example, segments of `dr::mhp::distributed_vector` are located in memory of different nodes (mpi processes). Still, global view of the `distributed_vector` is uniform, with contiguous indices.
 <!-- TODO: some pictures here -->
 
 #### Halo concept
@@ -97,7 +97,7 @@ To support this situation, the concept of halo was introduced. A halo is an area
 
 ### Algorithms
 
-Follwing algorithms are included in distributed-ranges, both in mhp and shp versions:
+Following algorithms are included in distributed-ranges, both in mhp and shp versions:
 
 ```cpp
  copy()
@@ -121,7 +121,7 @@ The examples should be compiled with SYCL compiler and run with.
 mpirun -n N ./build/src/example_name
 ```
 
-where `N` - number of MPI processes. Replace _example_name_ with appropiate name of a file tu run.
+where `N` - number of MPI processes. Replace _example_name_ with appropriate name of a file tu run.
 
 ### Example 1
 
@@ -140,13 +140,13 @@ The example shows the distributed nature of dr data structures. The distributed_
 
 [./src/example3.cpp](src/example3.cpp)
 
- The example simulates the elementary 1-d cellular automaton (ECA). Description of what the automaton is and how it works can be found in [wikipedia](https://en.wikipedia.org/wiki/Elementary_cellular_automaton). Visulisation of the automaton work is available in [ASU team webpage](https://elife-asu.github.io/wss-modules/modules/1-1d-cellular-automata).
+ The example simulates the elementary 1-d cellular automaton (ECA). Description of what the automaton is and how it works can be found in [wikipedia](https://en.wikipedia.org/wiki/Elementary_cellular_automaton). Visualisation of the automaton work is available in [ASU team webpage](https://elife-asu.github.io/wss-modules/modules/1-1d-cellular-automata).
 
  The ECA calculates the new value of a cell using old value of the cell and old values of the cell's neighbors. Therefore a halo of 1-cell width is used, to get access to neighboring cells' values when the loop eaches end of local segment of a vector.
  Additionally, a use of a subrange is presented, and `transform()` function, which puts transformed values of input structure to the output structure, element by element. The transforming function is given as lambda `newvalue`.
  _Please note: after each loop the vector content is printed with `fmt::print()`. The formatter function for `distributed_vector` is rather slow, as it gets the vector element by element, both from local node and remote nodes. You can think about customised, more effective way of results presentation._
 
 <!--
-Consider adding one more example: 
+Consider adding one more example:
 *Simple 2-D operation - Find a pattern in the randomly filled array*
 -->
