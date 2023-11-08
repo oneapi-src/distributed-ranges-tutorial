@@ -13,4 +13,5 @@ cmake --build build -j
 mpirun -n 2 ./build/src/example1
 mpirun -n 2 ./build/src/example2
 mpirun -n 2 ./build/src/example3
+mpirun -n 2 ./build/src/example4
 mpirun -n 2 ./build/src/example5
