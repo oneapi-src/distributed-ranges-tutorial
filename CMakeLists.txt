@@ -8,8 +8,19 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 project(
   distributed_ranges_tutorial
+  LANGUAGES CXX
   VERSION 0.1
   DESCRIPTION "Distributed ranges tutorial")
+
+include(CheckCXXCompilerFlag)
+check_cxx_compiler_flag(-fsycl COMPILER_SUPPORTS_FSYCL)
+
+if(NOT COMPILER_SUPPORTS_FSYCL)
+  message(
+    FATAL_ERROR
+      "A compiler with SYCL support is required. Configure Intel(R) oneAPI DPC++/C++ or any other compiler with SYCL support in your system."
+  )
+endif()
 
 find_package(MPI REQUIRED)
 
