@@ -146,7 +146,16 @@ The example shows the distributed nature of dr data structures. The distributed_
  Additionally, a use of a subrange is presented, and `transform()` function, which puts transformed values of input structure to the output structure, element by element. The transforming function is given as lambda `newvalue`.
  _Please note: after each loop the vector content is printed with `fmt::print()`. The formatter function for `distributed_vector` is rather slow, as it gets the vector element by element, both from local node and remote nodes. You can think about customised, more effective way of results presentation._
 
-<!--
-Consider adding one more example:
-*Simple 2-D operation - Find a pattern in the randomly filled array*
--->
+### Example 4
+
+[./src/example4.cpp](src/example4.cpp)
+
+This example demonstrates adding 2 distributed,multidimensional arrays. In this case they have 2 dimensions. There is an std::array to initialize the size of each one of them and they are populated with sequential values using a distributed version of iota - `mhp::iota`. The main part of the code is a for_each loop that computes the sum on a specified number of nodes taking a lambda copy function, 2 input arrays (a and b) and one output array (c) as parameters. The result is printed on a node 0.
+
+### Example 5
+
+[./src/example5.cpp](src/example5.cpp)
+
+### Example 6
+
+[./src/example6.cpp](src/example6.cpp)
