@@ -26,3 +26,8 @@ add_executable(example3 example3.cpp)
 
 target_compile_definitions(example3 INTERFACE DR_FORMAT)
 target_link_libraries(example3 DR::mpi fmt::fmt)
+
+add_executable(example4 example4.cpp)
+
+target_compile_definitions(example4 INTERFACE DR_FORMAT)
+target_link_libraries(example4 DR::mpi fmt::fmt)
