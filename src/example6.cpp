@@ -10,12 +10,10 @@ namespace mhp = dr::mhp;
 using T = uint16_t;
 using MDA = dr::mhp::distributed_mdarray<T, 2>;
 
+/* 2D pattern search in a distributed multidimensional (2D) array */
 int main() {
-#ifdef SYCL_LANGUAGE_VERSION
   mhp::init(sycl::default_selector_v);
-#else
-  mhp::init();
-#endif
+
   std::size_t arr_size = 7;
   const std::size_t pattern_size = 2;
   const std::size_t radius = pattern_size - 1;
@@ -42,7 +40,7 @@ int main() {
         pattern[0][1] == a_submdspan(0, 1) &&
         pattern[1][0] == a_submdspan(1, 0) &&
         pattern[1][1] == a_submdspan(1, 1)) {
-      occurrences(0, 0)++;
+      occurrences(0, 0) = 1;
     }
   };
 
