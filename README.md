@@ -156,6 +156,8 @@ This example demonstrates adding 2 distributed,multidimensional arrays. In this 
 
 [./src/example5.cpp](src/example5.cpp)
 
+Example 5 provides a clear method for calculating a 2D 5-point stencil using distributed multidimensional arrays, specifically `dr::mhp::distributed_mdarray`. Initially, it involves setting up key parameters like the radius for element exchange between nodes through `dr::mhp::halo`, and defining the start and end points of the array slice. Central to this example is the `mhp::stencil_for_each` function, which applies a lambda function to two subsets of the array, designated as input and output. This lambda function, mdspan_stencil_op, performs a simple calculation by summing the values of an element and its neighbors and then averaging them. This process is made possible by `mhp::halo().exchange()`, which allows for the sharing of values across different nodes. Finally, the results are neatly displayed on node 0 using mdspan(), making it easy to understand the changes made to the 2D array. This example is a practical demonstration of performing stencil operations on distributed arrays.
+
 ### Example 6
 
 [./src/example6.cpp](src/example6.cpp)

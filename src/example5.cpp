@@ -19,14 +19,14 @@ int main() {
   std::array slice_starts{radius, radius};
   std::array slice_ends{arr_size - radius, arr_size - radius};
 
-  auto dist = dr::mhp::distribution().halo(radius);
+  auto dist = mhp::distribution().halo(radius);
   MDA a({arr_size, arr_size}, dist);
   MDA b({arr_size, arr_size}, dist);
   mhp::iota(a, 1);
   mhp::iota(b, 1);
 
-  auto in = dr::mhp::views::submdspan(a.view(), slice_starts, slice_ends);
-  auto out = dr::mhp::views::submdspan(b.view(), slice_starts, slice_ends);
+  auto in = mhp::views::submdspan(a.view(), slice_starts, slice_ends);
+  auto out = mhp::views::submdspan(b.view(), slice_starts, slice_ends);
 
   auto mdspan_stencil_op = [](auto &&v) {
     auto [in, out] = v;
