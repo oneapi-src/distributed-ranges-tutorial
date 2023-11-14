@@ -161,3 +161,5 @@ Example 5 provides a clear method for calculating a 2D 5-point stencil using dis
 ### Example 6
 
 [./src/example6.cpp](src/example6.cpp)
+
+The code of this example showcases a 2D pattern search in a distributed, multidimensional array (`mhp::distributed_mdarray<float, 2>`). It initializes a two-dimensional array, populates it using `mhp::iota`, transforms to binary values using `mhp::transform` and defines a 2x2 pattern. The code uses a lambda function to scan the array and mark occurrences of the pattern in a separate array. The mechanism is very similar to the one in the example5.
