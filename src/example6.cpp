@@ -15,6 +15,8 @@ int main() {
   mhp::init(sycl::default_selector_v);
 
   std::size_t arr_size = 7;
+  // keep in mind that if you change the pattern size, you have to also change
+  // the pattern array
   const std::size_t pattern_size = 2;
   const std::size_t radius = pattern_size - 1;
   std::array slice_starts{radius - 1, radius - 1};
@@ -30,8 +32,6 @@ int main() {
 
   auto a_submdspan =
       dr::mhp::views::submdspan(a.view(), slice_starts, slice_ends);
-  auto occurrences = dr::mhp::views::submdspan(occurrences_coords.view(),
-                                               slice_starts, slice_ends);
   int pattern[pattern_size][pattern_size] = {{1, 0}, {0, 1}};
 
   auto mdspan_pattern_op = [pattern](auto &&v) {
@@ -45,7 +45,7 @@ int main() {
   };
 
   mhp::halo(a).exchange();
-  mhp::stencil_for_each(mdspan_pattern_op, a_submdspan, occurrences);
+  mhp::stencil_for_each(mdspan_pattern_op, a_submdspan, occurrences_coords);
 
   if (mhp::rank() == 0) {
     fmt::print("a: \n{} \n", a.mdspan());
