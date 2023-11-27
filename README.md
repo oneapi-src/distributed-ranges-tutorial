@@ -146,7 +146,20 @@ The example shows the distributed nature of dr data structures. The distributed_
  Additionally, a use of a subrange is presented, and `transform()` function, which puts transformed values of input structure to the output structure, element by element. The transforming function is given as lambda `newvalue`.
  _Please note: after each loop the vector content is printed with `fmt::print()`. The formatter function for `distributed_vector` is rather slow, as it gets the vector element by element, both from local node and remote nodes. You can think about customised, more effective way of results presentation._
 
-<!--
-Consider adding one more example:
-*Simple 2-D operation - Find a pattern in the randomly filled array*
--->
+### Example 4
+
+[./src/example4.cpp](src/example4.cpp)
+
+This example illustrates adding two distributed,multidimensional arrays. Each array has two dimensions and is initialized by an `std::array`. The arrays are populated with sequential values using a distributed version of iota called `mhp::iota`. A for_each loop is the main part of the code, computing the sum on a specified number of nodes. It takes a lambda copy function along with two input arrays (a and b) and an output array (c) as parameters. The result is printed on a node 0.
+
+### Example 5
+
+[./src/example5.cpp](src/example5.cpp)
+
+Example 5 outlines a method for calculating a 2D 5-point stencil with distributed multidimensional arrays, specifically utilizing `dr::mhp::distributed_mdarray`. Initially, it involves setting up key parameters like the radius for element exchange between nodes through `dr::mhp::halo`, and defining the start and end points of the array slice. The example's core is the `mhp::stencil_for_each` function, which applies a lambda function to two subsets of the array, designated as input and output. The `mdspan_stencil_op` lambda function conducts a simple calculation that involves adding together the values of an element and its adjacent elements and subsequently calculating their average. The `mhp::halo().exchange()` enables values to be shared across distinct nodes, making this process feasible. Ultimately, the outcomes of the calculation are neatly displayed on node 0 using mdspan(), resulting in a clear indication of the modifications made to the 2D array. This example is a practical demonstration of executing stencil operations on distributed arrays.
+
+### Example 6
+
+[./src/example6.cpp](src/example6.cpp)
+
+This example's code demonstrates a 2D pattern search in a distributed, multidimensional array (`mhp::distributed_mdarray<float, 2>`). It initializes a 2D array, populates it with `mhp::iota`, converts it to binary values using `mhp::transform` and defines a pattern of 2x2. A lambda function is used to scan the array and mark occurrences of the pattern in a separate array. The process is similar to the one demonstrated in example5.

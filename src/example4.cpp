@@ -24,11 +24,11 @@ int main(int argc, char **argv) {
   mhp::iota(a, 100);
   mhp::iota(b, 200);
 
-  auto copy_op = [](auto v) {
+  auto sum_op = [](auto v) {
     auto [in1, in2, out] = v;
     out = in1 + in2;
   };
-  mhp::for_each(copy_op, a, b, c);
+  mhp::for_each(sum_op, a, b, c);
 
   if (mhp::rank() == 0) {
     fmt::print("A:\n{}\n", a.mdspan());
