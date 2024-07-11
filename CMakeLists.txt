@@ -35,11 +35,11 @@ include(FetchContent)
 FetchContent_Declare(
   distributed-ranges
   GIT_REPOSITORY https://github.com/oneapi-src/distributed-ranges.git
-  GIT_TAG c618154a1bceda33e5d61e1536179aeaa11b68f4)
+  GIT_TAG main)
 FetchContent_MakeAvailable(distributed-ranges)
 
 FetchContent_Declare(
   cpp-format
   GIT_REPOSITORY https://github.com/fmtlib/fmt.git
-  GIT_TAG 0b0f7cf)
+  GIT_TAG master)
 FetchContent_MakeAvailable(cpp-format)
