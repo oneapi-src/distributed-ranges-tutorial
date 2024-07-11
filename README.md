@@ -26,7 +26,7 @@ In Linux system (bash shell) download distributed-ranges-tutorial from GitHub an
  git clone https://github.com/mateuszpn/distributed-ranges-tutorial
  cd distributed-ranges-tutorial
  CXX=icpx CC=icx cmake -B build
- cmake --build build
+ cmake --build build -j
  mpirun -n N ./build/src/example_name
  ```
 
@@ -48,6 +48,7 @@ In case your environment is not configured properly or you just prefer a hassle-
  cd custom-directory-name
  CXX=icpx CC=icx cmake -B build -DENABLE_SYCL=ON
  cmake --build build -j
+ mpirun -n N ./build/src/example_name
  ```
 
 where 'custom-directory-name' stands for the name of a directory containing local repo data on a docker volume
