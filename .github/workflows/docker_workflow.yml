@@ -6,9 +6,11 @@ name: Docker
 permissions: read-all
 
 on:
-  push:
   pull_request:
   workflow_dispatch:
+  push:
+    branches:
+      - main
 
 jobs:
   run_precommit:
