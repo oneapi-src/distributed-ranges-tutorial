@@ -26,7 +26,7 @@ jobs:
         run: |
           pip install pre-commit
           pre-commit run --all
-          
+
   run_examples:
     name: Build and run examples
     runs-on: ubuntu-latest
