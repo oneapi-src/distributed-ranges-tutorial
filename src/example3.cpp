@@ -5,8 +5,6 @@
 #include <dr/mp.hpp>
 #include <fmt/core.h>
 
-namespace mhp = dr::mhp;
-
 /* The example simulates the elementary 1-d cellular automaton. Description of
  * what the automaton is and how it works can be found at
  * https://en.wikipedia.org/wiki/Elementary_cellular_automaton
