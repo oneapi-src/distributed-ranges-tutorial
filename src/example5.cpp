@@ -6,7 +6,7 @@
 #include <fmt/core.h>
 
 using T = float;
-using MDA = dr::mhp::distributed_mdarray<T, 2>;
+using MDA = dr::mp::distributed_mdarray<T, 2>;
 
 /* 2d stencil - simple operation on multi-dimensional array */
 int main() {
