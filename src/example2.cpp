@@ -2,35 +2,33 @@
 //
 // SPDX-License-Identifier: BSD-3-Clause
 
-#include <dr/mhp.hpp>
+#include <dr/mp.hpp>
 #include <fmt/core.h>
-
-namespace mhp = dr::mhp;
 
 int main(int argc, char **argv) {
 
-  mhp::init(sycl::default_selector_v);
+  dr::mp::init(sycl::default_selector_v);
 
   fmt::print(
       "Hello, World! Distributed ranges process is running on rank {} / {} on "
       "host {}\n",
-      mhp::rank(), mhp::nprocs(), mhp::hostname());
+      dr::mp::rank(), dr::mp::nprocs(), dr::mp::hostname());
 
   std::size_t n = 100;
 
-  mhp::distributed_vector<int> v(n);
-  mhp::iota(v, 1);
+  dr::mp::distributed_vector<int> v(n);
+  dr::mp::iota(v, 1);
 
-  if (mhp::rank() == 0) {
+  if (dr::mp::rank() == 0) {
     auto &&segments = v.segments();
     fmt::print("Created distributed vector of size {} with {} segments.\n",
                v.size(), segments.size());
   }
 
-  fmt::print("Rank {} owns segment of size {} and content {}\n", mhp::rank(),
-             mhp::local_segment(v).size(), mhp::local_segment(v));
+  fmt::print("Rank {} owns segment of size {} and content {}\n", dr::mp::rank(),
+             dr::mp::local_segment(v).size(), dr::mp::local_segment(v));
 
-  mhp::finalize();
+  dr::mp::finalize();
 
   return 0;
 }

@@ -3,14 +3,14 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
 name: Docker
+permissions: read-all
 
 on:
-  push:
   pull_request:
   workflow_dispatch:
-  # 8am UTC is 12am PST, 1am PDT
-  schedule:
-  - cron: '0 8 * * *'
+  push:
+    branches:
+      - main
 
 jobs:
   run_precommit:
@@ -18,14 +18,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out
-        uses: actions/checkout@v3
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
       - name: Setup Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@f677139bbe7f9c59b41e40162b753c062f5d49a3 # v5.2.0
         with:
-          python-version: '3.10'
+          python-version: '3.11'
           cache: 'pip'
-      - name: Run pre-commit
-        uses: pre-commit/action@v3.0.0
+      - name: Run checkers
+        run: |
+          pip install pre-commit
+          pre-commit run --all
+
   run_examples:
     name: Build and run examples
     runs-on: ubuntu-latest
@@ -38,9 +41,7 @@ jobs:
         - ${{ github.workspace }}:/src
     steps:
       - name: Check out
-        uses: actions/checkout@v3
-      - name: Setup cmake
-        uses: jwlawson/actions-setup-cmake@v1.13
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
       - name: Build examples
         run: |
           cmake -B build

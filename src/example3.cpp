@@ -2,10 +2,8 @@
 //
 // SPDX-License-Identifier: BSD-3-Clause
 
-#include <dr/mhp.hpp>
+#include <dr/mp.hpp>
 #include <fmt/core.h>
-
-namespace mhp = dr::mhp;
 
 /* The example simulates the elementary 1-d cellular automaton. Description of
  * what the automaton is and how it works can be found at
@@ -27,10 +25,10 @@ auto newvalue = [](auto &&p) {
 
 int main(int argc, char **argv) {
 
-  mhp::init(sycl::default_selector_v);
+  dr::mp::init(sycl::default_selector_v);
 
-  auto dist = dr::mhp::distribution().halo(1);
-  mhp::distributed_vector<uint8_t> a1(asize + 2, 0, dist),
+  auto dist = dr::mp::distribution().halo(1);
+  dr::mp::distributed_vector<uint8_t> a1(asize + 2, 0, dist),
       a2(asize + 2, 0, dist);
 
   auto in = rng::subrange(a1.begin() + 1, a1.end() - 1);
@@ -39,23 +37,23 @@ int main(int argc, char **argv) {
   /* initial value of the automaton - customize it if you want to */
   in[0] = 1;
 
-  if (mhp::rank() == 0)
+  if (dr::mp::rank() == 0)
     fmt::print("{}\n", in);
 
   for (std::size_t s = 0; s < steps; s++) {
-    dr::mhp::halo(in).exchange();
+    dr::mp::halo(in).exchange();
 
-    mhp::transform(in, out.begin(), newvalue);
+    dr::mp::transform(in, out.begin(), newvalue);
 
     std::swap(in, out);
 
     /* fmt::print() is rather slow here, as it gets element by element from
      * remote nodes. Use with care. */
-    if (mhp::rank() == 0)
+    if (dr::mp::rank() == 0)
       fmt::print("{}\n", in);
   }
 
-  mhp::finalize();
+  dr::mp::finalize();
 
   return 0;
 }
