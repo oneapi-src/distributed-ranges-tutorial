@@ -84,6 +84,9 @@ int main() {
     fmt::print("\n");
   }
 
+  if (root == dr::mp::default_comm().rank()) {
+    dr::__detail::destroy_csr_matrix_view(local_data, std::allocator<double>{});
+  }
   dr::mp::finalize();
 
   return 0;

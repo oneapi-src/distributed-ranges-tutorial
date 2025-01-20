@@ -71,7 +71,7 @@ The distributed-ranges library provides data-structures, algorithms and views de
 Algorithms and data structures are designed to take the user off the need to worry about the technical details of their parallelism. An example would be the definition of a distributed vector in memory of multiple nodes connected using MPI.
 
 ```cpp
-dr::mhp::distributed_vector<double> dv(N);
+dr::mp::distributed_vector<double> dv(N);
 ```
 
 Such a vector, containing N elements, is automatically distributed among all the nodes involved in the calculation, with individual nodes storing an equal (if possible) amount of data.
@@ -82,12 +82,12 @@ In this way, many of the technical details related to the parallel execution of 
 ### Namespaces
 
 General namespace used in the library is `dr::`
-For program using a single node with shared memory available for multiple CPUs and one or more GPUs, data structures and algorithms from `dr::shp::` namespace are provided.
-For distributed memory model, use the `dr::mhp::` namespace.
+For program using a single node with shared memory available for multiple CPUs and one or more GPUs, data structures and algorithms from `dr::sp::` namespace are provided.
+For distributed memory model, use the `dr::mp::` namespace.
 
 ### Data structures
 
-Content of distributes-ranges' data structures is distributed over available nodes. For example, segments of `dr::mhp::distributed_vector` are located in memory of different nodes (mpi processes). Still, global view of the `distributed_vector` is uniform, with contiguous indices.
+Content of distributes-ranges' data structures is distributed over available nodes. For example, segments of `dr::mp::distributed_vector` are located in memory of different nodes (mpi processes). Still, global view of the `distributed_vector` is uniform, with contiguous indices.
 <!-- TODO: some pictures here -->
 
 #### Halo concept
@@ -98,7 +98,7 @@ To support this situation, the concept of halo was introduced. A halo is an area
 
 ### Algorithms
 
-Following algorithms are included in distributed-ranges, both in mhp and shp versions:
+Following algorithms are included in distributed-ranges, both in mp and sp versions:
 
 ```cpp
  copy()
@@ -151,16 +151,28 @@ The example shows the distributed nature of dr data structures. The distributed_
 
 [./src/example4.cpp](src/example4.cpp)
 
-This example illustrates adding two distributed,multidimensional arrays. Each array has two dimensions and is initialized by an `std::array`. The arrays are populated with sequential values using a distributed version of iota called `mhp::iota`. A for_each loop is the main part of the code, computing the sum on a specified number of nodes. It takes a lambda copy function along with two input arrays (a and b) and an output array (c) as parameters. The result is printed on a node 0.
+This example illustrates adding two distributed,multidimensional arrays. Each array has two dimensions and is initialized by an `std::array`. The arrays are populated with sequential values using a distributed version of iota called `mp::iota`. A for_each loop is the main part of the code, computing the sum on a specified number of nodes. It takes a lambda copy function along with two input arrays (a and b) and an output array (c) as parameters. The result is printed on a node 0.
 
 ### Example 5
 
 [./src/example5.cpp](src/example5.cpp)
 
-Example 5 outlines a method for calculating a 2D 5-point stencil with distributed multidimensional arrays, specifically utilizing `dr::mhp::distributed_mdarray`. Initially, it involves setting up key parameters like the radius for element exchange between nodes through `dr::mhp::halo`, and defining the start and end points of the array slice. The example's core is the `mhp::stencil_for_each` function, which applies a lambda function to two subsets of the array, designated as input and output. The `mdspan_stencil_op` lambda function conducts a simple calculation that involves adding together the values of an element and its adjacent elements and subsequently calculating their average. The `mhp::halo().exchange()` enables values to be shared across distinct nodes, making this process feasible. Ultimately, the outcomes of the calculation are neatly displayed on node 0 using mdspan(), resulting in a clear indication of the modifications made to the 2D array. This example is a practical demonstration of executing stencil operations on distributed arrays.
+Example 5 outlines a method for calculating a 2D 5-point stencil with distributed multidimensional arrays, specifically utilizing `dr::mp::distributed_mdarray`. Initially, it involves setting up key parameters like the radius for element exchange between nodes through `dr::mp::halo`, and defining the start and end points of the array slice. The example's core is the `mp::stencil_for_each` function, which applies a lambda function to two subsets of the array, designated as input and output. The `mdspan_stencil_op` lambda function conducts a simple calculation that involves adding together the values of an element and its adjacent elements and subsequently calculating their average. The `mp::halo().exchange()` enables values to be shared across distinct nodes, making this process feasible. Ultimately, the outcomes of the calculation are neatly displayed on node 0 using mdspan(), resulting in a clear indication of the modifications made to the 2D array. This example is a practical demonstration of executing stencil operations on distributed arrays.
 
 ### Example 6
 
 [./src/example6.cpp](src/example6.cpp)
 
-This example's code demonstrates a 2D pattern search in a distributed, multidimensional array (`mhp::distributed_mdarray<float, 2>`). It initializes a 2D array, populates it with `mhp::iota`, converts it to binary values using `mhp::transform` and defines a pattern of 2x2. A lambda function is used to scan the array and mark occurrences of the pattern in a separate array. The process is similar to the one demonstrated in example5.
+This example's code demonstrates a 2D pattern search in a distributed, multidimensional array (`mp::distributed_mdarray<float, 2>`). It initializes a 2D array, populates it with `mp::iota`, converts it to binary values using `mp::transform` and defines a pattern of 2x2. A lambda function is used to scan the array and mark occurrences of the pattern in a separate array. The process is similar to the one demonstrated in example5.
+
+### Example 7
+
+[./src/example7.cpp](src/example7.cpp)
+
+This example showcases usage of `mp::distributed_sparse_matrix`. It retrieves data from `resources/example.mtx` file in root node, and distributes it between all nodes. The root node initializes vector and broadcasts it to every other node. After that, the `mp::gemv` operation is performed and result is returned to `std::vector<double>` in the root. Finally, the root prints the multiplied vector and the result.
+
+### Example 8
+
+[./src/example8.cpp](src/example8.cpp)
+
+The example 8 is exactly the same as example 7, the only thing that is different is the initialization of the matrix data. Here the matrix is generated inside the code, has different shape and uses random values. Additionaly, we print matrix data together with vector and result.
