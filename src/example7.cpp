@@ -31,15 +31,15 @@ int main() {
   dr::mp::broadcasted_vector<double> broadcasted_b;
   std::vector<double> b;
   if (root == dr::mp::rank()) {
-  b.resize(matrix.shape().second);
-  std::iota(b.begin(), b.end(), 1);
+    b.resize(matrix.shape().second);
+    std::iota(b.begin(), b.end(), 1);
 
-  broadcasted_b.broadcast_data(matrix.shape().second, 0, b,
-                               dr::mp::default_comm());
-  }
-  else {
-  broadcasted_b.broadcast_data(matrix.shape().second, 0, std::ranges::empty_view<V>(),
-                               dr::mp::default_comm());
+    broadcasted_b.broadcast_data(matrix.shape().second, 0, b,
+                                 dr::mp::default_comm());
+  } else {
+    broadcasted_b.broadcast_data(matrix.shape().second, 0,
+                                 std::ranges::empty_view<V>(),
+                                 dr::mp::default_comm());
   }
   std::vector<double> res(matrix.shape().first);
   gemv(root, res, matrix, broadcasted_b);
