@@ -4,18 +4,32 @@
 
 #include <dr/mp.hpp>
 #include <fmt/core.h>
+#include <random>
 
 /* Sparse band matrix vector multiplication */
 int main() {
   dr::mp::init(sycl::default_selector_v);
   using I = long;
   using V = double;
-
   dr::views::csr_matrix_view<V, I> local_data;
   auto root = 0;
   if (root == dr::mp::rank()) {
-    auto source = "./resources/example.mtx";
-    local_data = dr::read_csr<double, long>(source);
+    auto size = 10;
+    auto nnz = 20;
+    auto colInd = new I[nnz];
+    auto rowInd = new I[size + 1];
+    auto values = new V[nnz];
+    std::uniform_real_distribution<double> unif(0, 1);
+    std::default_random_engine re;
+    for (auto i = 0; i <= size; i++) {
+      rowInd[i] = i * 2; // two elements per row
+    }
+    for (auto i = 0; i < nnz; i++) {
+      colInd[i] = (i % 2) * (std::max(i / 2, 1)); // column on 0 and diagonal (with additional entry in first row)
+      values[i] = unif(re);
+    }
+
+    local_data = dr::views::csr_matrix_view<V, I>(values, rowInd, colInd, {size, size}, nnz, root);
   }
 
   dr::mp::distributed_sparse_matrix<
@@ -37,7 +51,11 @@ int main() {
   gemv(root, res, matrix, broadcasted_b);
 
   if (root == dr::mp::rank()) {
-    fmt::print("Matrix imported from {}\n", "./resources/example.mtx");
+    fmt::print("Matrix with {} x {} and number of non-zero entries equal to {} and entries:\n", matrix.shape().first, matrix.shape().second, matrix.size());
+    for (auto [i, v]: matrix) {
+      auto [n, m] = i;
+      fmt::print("Matrix entry <{}, {}, {}>\n", n, m, v);
+    }
     fmt::print("Input: ");
     for (auto x : b) {
       fmt::print("{} ", x);

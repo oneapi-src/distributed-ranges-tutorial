@@ -17,3 +17,4 @@ mpirun -n 3 ./build/src/example4
 mpirun -n 3 ./build/src/example5
 mpirun -n 3 ./build/src/example6
 mpirun -n 3 ./build/src/example7
+mpirun -n 3 ./build/src/example8
