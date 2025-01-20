@@ -25,11 +25,14 @@ int main() {
       rowInd[i] = i * 2; // two elements per row
     }
     for (auto i = 0; i < nnz; i++) {
-      colInd[i] = (i % 2) * (std::max(i / 2, 1)); // column on 0 and diagonal (with additional entry in first row)
+      colInd[i] =
+          (i % 2) * (std::max(i / 2, 1)); // column on 0 and diagonal (with
+                                          // additional entry in first row)
       values[i] = unif(re);
     }
 
-    local_data = dr::views::csr_matrix_view<V, I>(values, rowInd, colInd, {size, size}, nnz, root);
+    local_data = dr::views::csr_matrix_view<V, I>(values, rowInd, colInd,
+                                                  {size, size}, nnz, root);
   }
 
   dr::mp::distributed_sparse_matrix<
@@ -51,8 +54,10 @@ int main() {
   gemv(root, res, matrix, broadcasted_b);
 
   if (root == dr::mp::rank()) {
-    fmt::print("Matrix with {} x {} and number of non-zero entries equal to {} and entries:\n", matrix.shape().first, matrix.shape().second, matrix.size());
-    for (auto [i, v]: matrix) {
+    fmt::print("Matrix with {} x {} and number of non-zero entries equal to {} "
+               "and entries:\n",
+               matrix.shape().first, matrix.shape().second, matrix.size());
+    for (auto [i, v] : matrix) {
       auto [n, m] = i;
       fmt::print("Matrix entry <{}, {}, {}>\n", n, m, v);
     }
