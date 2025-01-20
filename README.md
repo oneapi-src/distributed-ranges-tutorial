@@ -175,4 +175,4 @@ This example showcases usage of `mp::distributed_sparse_matrix`. It retrieves da
 
 [./src/example8.cpp](src/example8.cpp)
 
-The example 8 is exactly the same as example 7, the only thing that is different is the initialization of the matrix data. Here the matrix is generated inside the code, has different shape and uses random values. Additionaly, we print matrix data together with vector and result.
+The example 8 is exactly the same as example 7, the only thing that is different is the initialization of the matrix data. Here the matrix is generated inside the code, has different shape and uses random values. Additionally, we print matrix data together with vector and result.
