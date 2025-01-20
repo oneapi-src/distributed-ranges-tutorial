@@ -5,6 +5,7 @@
 #include <dr/mp.hpp>
 #include <fmt/core.h>
 #include <random>
+#include <ranges>
 
 /* Sparse band matrix vector multiplication */
 int main() {
@@ -21,6 +22,12 @@ int main() {
     auto values = new V[nnz];
     std::uniform_real_distribution<double> unif(0, 1);
     std::default_random_engine re;
+    // x x 0 0 ... 0
+    // x x 0 0 ... 0
+    // x 0 x 0 ... 0
+    // x 0 0 x ... 0
+    // .............
+    // x ... 0 0 0 x
     for (auto i = 0; i <= size; i++) {
       rowInd[i] = i * 2; // two elements per row
     }
@@ -40,17 +47,21 @@ int main() {
       dr::mp::csr_eq_distribution<V, I, dr::mp::MpiBackend>>
       matrix(local_data, root);
 
-  std::vector<double> b;
-  b.reserve(matrix.shape().second);
-  std::vector<double> res(matrix.shape().first);
-  for (auto i = 0; i < matrix.shape().second; i++) {
-    b.push_back(i);
-  }
-
   dr::mp::broadcasted_vector<double> broadcasted_b;
+  std::vector<double> b;
+ if (root == dr::mp::rank()) {
+  b.resize(matrix.shape().second);
+  std::iota(b.begin(), b.end(), 1);
+
   broadcasted_b.broadcast_data(matrix.shape().second, 0, b,
                                dr::mp::default_comm());
+  }
+  else {
+  broadcasted_b.broadcast_data(matrix.shape().second, 0, std::ranges::empty_view<V>(),
+                               dr::mp::default_comm());
+  }
 
+  std::vector<double> res(matrix.shape().first);
   gemv(root, res, matrix, broadcasted_b);
 
   if (root == dr::mp::rank()) {
